@@ -1,0 +1,59 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")      
+}
+
+generator client {
+  provider = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+}
+
+model User {
+  id            Int        @id @default(autoincrement())
+  name          String
+  email         String     @unique
+  passwordHash  String     @map("password_hash")
+  playlists     Playlist[]                  
+  createdAt     DateTime   @default(now())   @map("createdAt")
+  updatedAt     DateTime   @updatedAt         @map("updatedAt")
+
+  @@map("Users")
+}
+
+model Video {
+  id            Int              @id @default(autoincrement())
+  youtubeId     String           @unique       @map("youtube_id")
+  title         String
+  createdAt     DateTime         @default(now()) @map("createdAt")
+  updatedAt     DateTime         @updatedAt       @map("updatedAt")
+  playlistVideos PlaylistVideo[]
+
+  @@map("Videos")
+}
+
+model Playlist {
+  id            Int               @id @default(autoincrement())
+  title         String
+  description   String?
+  userId        Int               @map("userId")
+  user          User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  videos        PlaylistVideo[]                
+  createdAt     DateTime          @default(now()) @map("createdAt")
+  updatedAt     DateTime          @updatedAt       @map("updatedAt")
+
+  @@map("Playlists")
+}
+
+model PlaylistVideo {
+  id          Int      @id @default(autoincrement())
+  playlistId  Int      @map("playlistId")
+  videoId     Int      @map("videoId")
+  position    Int?
+  playlist    Playlist @relation(fields: [playlistId], references: [id], onDelete: Cascade)
+  video       Video    @relation(fields: [videoId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now()) @map("createdAt")
+  updatedAt   DateTime @updatedAt       @map("updatedAt")
+
+  @@unique([playlistId, videoId]) 
+  @@map("PlaylistVideos")
+}
