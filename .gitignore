@@ -1,13 +1,12 @@
 # Node
 **/node_modules/
 
-# Builds
-**/dist/
-**/build/
-
 # Env files
 .env
 **/.env
 
 # VSCode
 .vscode/
+
+# Prisma
+/src/generated/prisma
