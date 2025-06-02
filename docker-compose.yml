@@ -9,6 +9,14 @@ services:
       - "5432:5432"
     volumes:
       - db_data:/var/lib/postgresql/data
+  adminer:
+    image: adminer
+    container_name: plataforma-streaming-adminer
+    # restart: always
+    ports:
+      - "8081:8080"
+    depends_on:
+      - db
   api:
     build: 
       context: ./backend
