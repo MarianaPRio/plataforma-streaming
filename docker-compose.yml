@@ -1,0 +1,33 @@
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: streaming
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+  api:
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile
+    env_file: 
+      - ./backend/.env
+    depends_on:
+      - db
+    ports:
+      - "3000:3000"
+  web:
+    build: 
+      context: ./frontend
+      dockerfile: Dockerfile
+    env_file: 
+      - ./frontend/.env
+    depends_on:
+      - api
+    ports:
+      - "8080:80"
+volumes:
+  db_data:
