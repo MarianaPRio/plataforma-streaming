@@ -1,6 +1,5 @@
 import React from 'react';
 import { AppBar, Toolbar, IconButton, Typography, Box } from '@mui/material';
-// import HomeIcon from '@mui/icons-material/Home';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
