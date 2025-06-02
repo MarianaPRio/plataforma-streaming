@@ -20,6 +20,10 @@ const addVideo = async (playlistId, youtube_id) => {
   return data;
 };
 
+const addVideoToPlaylist = async (playlistId, youtubeId) => {
+  return api.post(`/playlists/${playlistId}/videos`, { youtube_id: youtubeId });
+};
+
 const getVideosFromPlaylist = async (playlistId) => {
   const { data } = await api.get(`/playlists/${playlistId}/videos`);
   return data;
@@ -29,4 +33,4 @@ const removeVideo = async (playlistId, videoId) => {
   await api.delete(`/playlists/${playlistId}/videos/${videoId}`);
 };
 
-export default { getVideosFromPlaylist, getById, getPlaylists, createPlaylist, updatePlaylist, deletePlaylist, addVideo, removeVideo };
+export default { addVideoToPlaylist , getVideosFromPlaylist, getById, getPlaylists, createPlaylist, updatePlaylist, deletePlaylist, addVideo, removeVideo };
