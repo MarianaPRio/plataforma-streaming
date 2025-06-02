@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Link as RouterLink, useLocation } from 'react-router-dom';
+import React, { useState, useEffect} from 'react';
+import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom';
 import videoService from '../services/videoService';
 import playlistService from '../services/playlistService';
 import NavBar from '../components/NavBar';
@@ -30,6 +30,8 @@ const Search = () => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState('success');
+
+  const navigate = useNavigate();
 
   const location = useLocation();
   const params = new URLSearchParams(location.search);
@@ -163,7 +165,13 @@ const Search = () => {
             </MenuItem>
           ))
         ) : (
-          <MenuItem disabled>Sem playlists</MenuItem>
+          <MenuItem onClick={() => {
+            if (selectedVideo) {
+              navigate(`/app/playlist?video=${selectedVideo.youtube_id}`);
+            }
+          }}>
+            Criar nova playlist
+          </MenuItem>
         )}
       </Menu>
       <Snackbar

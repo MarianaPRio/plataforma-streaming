@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import playlistService from '../services/playlistService';
 import {
   Container,
@@ -13,6 +13,8 @@ import {
 const Playlist = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [params] = useSearchParams();
+  const youtubeId = params.get('video');
   const [form, setForm] = useState({ title: '', description: '' });
 
   useEffect(() => {
@@ -29,8 +31,14 @@ const Playlist = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (id) await playlistService.updatePlaylist(id, form);
-    else await playlistService.createPlaylist(form);
+
+    if (id) {
+      await playlistService.updatePlaylist(id, form);
+    } else {
+      const playlist = await playlistService.createPlaylist(form);
+      if (youtubeId) await playlistService.addVideoToPlaylist(playlist.id, youtubeId);
+    }
+
     navigate('/app/dashboard', { replace: true });
   };
 
@@ -73,7 +81,6 @@ const Playlist = () => {
             rows={4}
             sx={{ mb: 2 }}
           />
-          
           <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1 }}>
             {id && (
               <Button
