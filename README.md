@@ -38,7 +38,7 @@ YouList é uma aplicação de streaming de vídeos que permite aos usuários cri
 
 - Pesquisa de vídeos do YouTube (via API) a partir do frontend.
 - Exibição de resultados em cards com thumbnail e título.
-- Adicionação de qualquer vídeo pesquisado a uma das playlists existentes.
+- Adição de qualquer vídeo pesquisado a uma das playlists existentes.
 
 ## Tecnologias Utilizadas
 - Backend
@@ -71,39 +71,55 @@ YouList é uma aplicação de streaming de vídeos que permite aos usuários cri
 
 3. Chave de API do YouTube
 
-- Para busca de vídeos a aplicação usa a API do YouTube. Você deve criar uma credencial no Google Cloud Console e disponibilizar a chave via variável de ambiente.
+- Para busca de vídeos a aplicação usa a API do YouTube. Você deve criar uma credencial no [Google Cloud Console](console.cloud.google.com/apis/credentials) e disponibilizar a chave via variável de ambiente.
 
 ## Instalação e Migrações
 
-No terminal, a partir da raiz do projeto (onde está o `docker-compose.yml`):
+1. Configuração das variaveis de ambiente
 
-1. Subir containers (PostgreSQL + API):
+- Crie uma cópia dos arquivos .env.example de ambos os módulos em suas respectivas pastas com o nome .env.,
+- No arquivo .env localizado na pasta backend, preencha as levando em consideração as seguintes descrições:
+    1. **DATABASE_URL**: preencha com a string de conexão utilizada no banco de dados. Por padrão, adota a string "postgres://postgres:postgres@db:5432/streaming";
+    2. **JWT_SECRET**: preencha com o termo a ser utilizado com "segredo" para a geração de tokens JWT. Para fins de avaliação, é possível utilizar qualquer palavra como segredo para a geração dos mesmos;
+    3. **YT_API_KEY**: preencha com uma chave de API do YouTube. Como mencionado anteriormente, se faz necessária a criação de uma credencial no Google Cloud Console e disponibilizar a chave via variável de ambiente;
+- No arquivo .env localizado na pasta frontend, preencha as levando em consideração as seguintes descrições:
+    1. **REACT_APP_API_URL**: preencha com o endereço para a API. Por padrão do sistema desenvolvido, utilize a URL "http://localhost:3000/".
+
+2. Subir containers (PostgreSQL + API):
+
+No terminal, a partir da raiz do projeto (onde está o `docker-compose.yml`):
 
 ```bash
 docker-compose up -d --build
 ```
 
-2.  Acessar o container da API para rodar migrações do Prisma:
+3.  Acessar o container da API para rodar migrações do Prisma:
 
 ```bash
-docker-compose exec api npx prisma migrate deploy
+docker-compose exec api npx prisma migrate dev --name init
+```
+> Em caso de erro na consulta ao banco de dados siga os comandos abaixo com os containers rodando:
+
+```bash
+docker-compose exec backend npx prisma migrate reset --force
+docker-compose exec api npx prisma migrate dev --name init
 ```
 
-3. Para acessar a aplicação:
-- Acesse `http://localhost:8080/login` faça login/registre-se.
+4. Para acessar a aplicação:
+- Acesse `http://localhost:8080` faça login/registre-se.
 
 ## Testes
 
 Para rodar os testes automatizados com cobertura é necessário que os containers Docker estejam em execução. Isso garante que o banco de dados e a API estejam disponíveis.
 
-## Back-end 
+### Back-end 
 - Com Docker: 
 
 ```bash
 docker-compose exec api npm test
 ```
 
-## Front-end 
+### Front-end 
 - Com Docker: 
 
 ```bash
