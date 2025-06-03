@@ -4,6 +4,7 @@ import videoService from '../services/videoService';
 import playlistService from '../services/playlistService';
 import NavBar from '../components/NavBar';
 import SearchBar from '../components/SearchBar';
+import BackButton from '../components/BackButton';
 import {
   Container,
   Typography,
@@ -17,6 +18,7 @@ import {
   MenuItem,
   Snackbar,
   Alert,
+  Box
 } from '@mui/material';
 
 const Search = () => {
@@ -80,7 +82,6 @@ const Search = () => {
       setSnackbarSeverity('success');
       setSnackbarOpen(true);
     } catch (err) {
-      console.error('Erro ao adicionar vídeo à playlist:', err);
       setSnackbarMessage('Falha ao adicionar vídeo.');
       setSnackbarSeverity('error');
       setSnackbarOpen(true);
@@ -95,11 +96,27 @@ const Search = () => {
   return (
     <Container sx={{ mt: 4 }}>
       <NavBar />
-      <SearchBar
-        query={query}
-        onChange={(e) => setQuery(e.target.value)}
-        onSearch={handleSearch}
-      />
+      <Box
+        sx={{
+          position: 'relative',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          mt: 2,
+          mb: 4,
+        }}
+      >
+        <Box sx={{ position: 'absolute', left: 0 }}>
+          <BackButton topMargin={0} />
+        </Box>
+        <Box sx={{ width: '100%', maxWidth: 600 }}>
+          <SearchBar
+            query={query}
+            onChange={(e) => setQuery(e.target.value)}
+            onSearch={handleSearch}
+          />
+        </Box>
+      </Box>
       {hasSearched && results.length === 0 && (
         <Typography align="center">Nenhum vídeo encontrado.</Typography>
       )}
