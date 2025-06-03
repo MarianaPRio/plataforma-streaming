@@ -1,3 +1,4 @@
+// src/pages/Player.jsx
 import React, { useEffect, useState, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { Link as RouterLink } from 'react-router-dom';

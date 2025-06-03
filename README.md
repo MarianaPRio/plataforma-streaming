@@ -89,14 +89,23 @@ docker-compose up -d --build
 docker-compose exec api npx prisma migrate deploy
 ```
 
-3.  Instalar dependências (caso queira rodar local sem Docker):
+3. Para acessar a aplicação:
+- Acesse `http://localhost:8080/login` faça login/registre-se.
+
+## Testes
+
+Para rodar os testes automatizados com cobertura é necessário que os containers Docker estejam em execução. Isso garante que o banco de dados e a API estejam disponíveis.
+
+## Back-end 
+- Com Docker: 
 
 ```bash
-cd backend
-npm install
-npx prisma migrate dev
-npm run dev
+docker-compose exec api npm test
 ```
 
-4. Para acessar a aplicação:
-- Acesse `http://localhost:8080/login` faça login/registre-se.
+## Front-end 
+- Com Docker: 
+
+```bash
+docker-compose exec web npm test
+```
