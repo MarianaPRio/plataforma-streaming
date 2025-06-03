@@ -1,4 +1,3 @@
-// src/pages/VideoDetail.jsx
 import React, { useEffect, useState } from 'react';
 import { useParams, Link as RouterLink } from 'react-router-dom';
 import NavBar from '../components/NavBar';
